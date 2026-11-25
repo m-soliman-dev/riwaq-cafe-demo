@@ -33,7 +33,7 @@ const I={
  mail:SV('<rect x="6" y="12" width="52" height="40" rx="4"/><path d="M8 16l24 20 24-20"/>')
 };
 const CATI={hot:I.cup,cold:I.iced,other:I.leaf,dessert:I.cake,snack:I.sand};
-const COLORS = { hot: ["#3b2a20", "#B98250"], cold: ["#2B211C", "#87917B"], other: ["#4a5a3f", "#87917B"], dessert: ["#4a2c20", "#D4A85F"], snack: ["#3b2a20", "#87917B"] };
+const COLORS = { hot: ["#3b2a20", "#b88a3e"], cold: ["#2B211C", "#87917B"], other: ["#4a5a3f", "#87917B"], dessert: ["#4a2c20", "#D4A85F"], snack: ["#3b2a20", "#87917B"] };
 const ICON = CATI;
 function ph(p, big) {
   const c = COLORS[p.cat] || COLORS.hot;
@@ -126,7 +126,7 @@ function about() {
   <div style="margin-top:22px"><a class="btn" href="#/booking">احجز طاولتك</a></div></div>`);
 }
 function gallery() {
-  app(`${phead("معرض الصور", "لقطات من المكان")}<div class="wrap"><div class="grid">${S.gallery.map((g, i) => `<div class="card"><div class="ph" style="--c1:${["#3b2a20", "#2B211C", "#4a2c20", "#4a5a3f", "#3b2a20", "#2B211C"][i % 6]};--c2:${["#B98250", "#87917B", "#D4A85F", "#87917B", "#D4A85F", "#B98250"][i % 6]}">${g.image ? `<img src="${g.image}" alt="${esc(g.cap)}" loading="lazy">` : [I.cup, I.couch, I.cake, I.laptop, I.leaf, I.music][i % 6]}</div><div class="b"><b>${esc(g.cap)}</b></div></div>`).join("")}</div><p class="note">الصور دي أماكن مؤقتة، تتغير بصور المكان الحقيقية من لوحة التحكم.</p></div>`);
+  app(`${phead("معرض الصور", "لقطات من المكان")}<div class="wrap"><div class="grid">${S.gallery.map((g, i) => `<div class="card"><div class="ph" style="--c1:${["#3b2a20", "#2B211C", "#4a2c20", "#4a5a3f", "#3b2a20", "#2B211C"][i % 6]};--c2:${["#b88a3e", "#87917B", "#D4A85F", "#87917B", "#D4A85F", "#b88a3e"][i % 6]}">${g.image ? `<img src="${g.image}" alt="${esc(g.cap)}" loading="lazy">` : [I.cup, I.couch, I.cake, I.laptop, I.leaf, I.music][i % 6]}</div><div class="b"><b>${esc(g.cap)}</b></div></div>`).join("")}</div><p class="note">الصور دي أماكن مؤقتة، تتغير بصور المكان الحقيقية من لوحة التحكم.</p></div>`);
 }
 function bookingDates() { const o = []; for (let i = 0; i < 14; i++) { const d = new Date(); d.setDate(d.getDate() + i); o.push(d); } return o; }
 function booking() {
