@@ -217,3 +217,9 @@ details summary{color:#fff}
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
 .hero .in>*{animation:rise .9s ease both}.hero .in>*:nth-child(2){animation-delay:.1s}.hero .in>*:nth-child(3){animation-delay:.2s}.hero .in>*:nth-child(4){animation-delay:.3s}.hero .in>*:nth-child(5){animation-delay:.4s}
 @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+/* bigger logo */
+.brand img{height:64px!important}
+.hero .hlogo{height:150px!important}
+#footer img{height:96px!important}
+@media(max-width:800px){.brand img{height:50px!important}.hero .hlogo{height:104px!important}}
