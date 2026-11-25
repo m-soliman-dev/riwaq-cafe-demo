@@ -72,6 +72,7 @@ function home() {
   <div class="in"><img class="hlogo" src="img/logo.png" alt="RIWAQ CAFÉ"><div class="tag">SPECIALTY COFFEE · الشيخ زايد</div><h1>${esc(s.heroTitle)}</h1><p>${esc(s.heroText)}</p>
   <div class="cta"><a class="btn" href="#/menu">شوف المنيو</a><a class="btn alt" href="#/booking">احجز طاولة</a><a class="btn alt" href="#/order">اطلب أونلاين</a></div></div>${s.heroImage ? "" : `<div class="cup">${I.cup}</div>`}</section>
   <div class="wrap"><div class="info-strip"><div><b>${I.pin} العنوان</b>${esc(s.address)}</div><div><b>${I.clock} مواعيد العمل</b>${s.hours.map(esc).join("<br>")}</div><div><b>${I.phone} تواصل</b><span dir="ltr">${esc(s.phone)}</span></div></div>
+  <div class="feats">${[[I.cup, "قهوة مختصة", "حبوب مختارة ومحمّصة بعناية"], [I.laptop, "للشغل والمذاكرة", "هدوء وإنترنت وأماكن مريحة"], [I.clock, "كل يوم 8ص حتى 12م", "الخميس والجمعة حتى 1ص"], [I.pin, "توصيل في الشيخ زايد", "أو استلام من الفرع"]].map(f => `<div class="feat">${f[0]}<div><b>${f[1]}</b><span>${f[2]}</span></div></div>`).join("")}</div>
   <div class="sec-h"><div><h2>اختار مزاجك</h2><p class="sub">قهوة، حلويات، وجبات خفيفة</p></div><a href="#/menu">كل المنيو ←</a></div>
   <div class="tiles">${tiles.map(t => `<a class="tile" href="#/menu" data-cat="${t[0]}" style="background-image:url('img/${t[1]}.jpg')"><span>${esc(catName(t[0]))}</span></a>`).join("")}</div>
   <div class="split"><img src="img/interior.jpg" alt="داخل رِواق كافيه" loading="lazy"><div><span class="tag2">عن رِواق</span><h2>مش مجرد مكان لشرب القهوة</h2><p>مساحة بتجمع القهوة المختصة والأجواء الهادئة. تيجي تشتغل، تذاكر، تقابل صحابك، أو تاخد قهوتك الصبح وتمشي.</p><ul class="ticks"><li>قهوة مختصة من حبوب مختارة</li><li>أماكن هادئة للشغل والمذاكرة</li><li>حجز مسبق للجلسات واللقاءات</li></ul><a class="btn" href="#/about">اعرف أكتر</a></div></div>
@@ -79,7 +80,8 @@ function home() {
   <div class="grid">${pop.map(productCard).join("")}</div>
   <div class="split rev"><img src="img/lounge.jpg" alt="جلسة هادئة" loading="lazy"><div><span class="tag2">للشغل واللقاءات</span><h2>احجز طاولتك قبل ما توصل</h2><p>اختار اليوم والوقت وعدد الأشخاص، وهنأكد معاك على الواتساب.</p><a class="btn" href="#/booking">احجز طاولة</a> <a class="btn alt dk" href="#/events">الفعاليات</a></div></div>
   <div class="sec-h"><div><h2>العروض</h2></div><a href="#/offers">كل العروض ←</a></div>
-  <div class="grid">${S.offers.slice(0, 3).map(o => `<div class="box offer"><span class="status">${esc(o.tag)}</span><h3>${esc(o.title)}</h3><p>${esc(o.text)}</p></div>`).join("")}</div></div>`);
+  <div class="grid">${S.offers.slice(0, 3).map(o => `<div class="box offer"><span class="status">${esc(o.tag)}</span><h3>${esc(o.title)}</h3><p>${esc(o.text)}</p></div>`).join("")}</div>
+  <div class="cta-banner" style="background-image:url('img/takeaway.jpg')"><h2>قهوتك جاهزة قبل ما توصل</h2><p>اطلب أونلاين واستلم من الفرع أو على باب بيتك.</p><a class="btn" href="#/order">اطلب دلوقتي</a> <a class="btn alt" href="#/menu">شوف المنيو</a></div></div>`);
 }
 let mq = { q: "", cat: "all", sort: "pop" };
 function menu() {
@@ -301,4 +303,12 @@ function aInbox() {
 }
 
 $("#burger").onclick = () => $("#nav").classList.toggle("open");
+function reveal() {
+  const els = document.querySelectorAll("#app .card, #app .tile, #app .split, #app .box, #app .feat, #app .sec-h, #app .cta-banner, #app details");
+  if (!("IntersectionObserver" in window)) return;
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px", threshold: 0.05 });
+  els.forEach(el => { if (!el.classList.contains("rv")) { el.classList.add("rv"); io.observe(el); } });
+}
+new MutationObserver(() => { clearTimeout(window._rv); window._rv = setTimeout(reveal, 30); }).observe($("#app"), { childList: true });
+window.addEventListener("scroll", () => $("#top").classList.toggle("sc", scrollY > 30), { passive: true });
 window.addEventListener("hashchange", route); saveCart(); route();
