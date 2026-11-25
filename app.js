@@ -1,6 +1,6 @@
 "use strict";
 /* RIWAQ CAFÉ demo. البيانات بتتخزن في المتصفح (localStorage). النسخة الحقيقية محتاجة سيرفر. */
-const KEY = "riwaq_v1", ADMIN_PASS = "riwaq2026";
+const KEY = "riwaq_v2", ADMIN_PASS = "riwaq2026";
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const EGP = n => Number(n).toLocaleString("en-US") + " EGP";
@@ -58,7 +58,7 @@ function seo(n) {
   document.title = (t ? t + " | " : "") + "رِواق كافيه | RIWAQ CAFÉ";
 }
 const app = html => { $("#app").innerHTML = html; };
-const phead = (t, s) => `<div class="pagehero"><h1>${t}</h1>${s ? `<p>${s}</p>` : ""}</div>`;
+const phead = (t, s, bg) => `<div class="pagehero ${bg ? "pbg" : ""}" ${bg ? `style="background-image:url('${bg}')"` : ""}><h1>${t}</h1>${s ? `<p>${s}</p>` : ""}</div>`;
 function wa(msg) { return `https://wa.me/${S.settings.whatsapp}?text=${encodeURIComponent(msg || "أهلاً رِواق كافيه")}`; }
 
 /* ---------- Pages ---------- */
@@ -67,20 +67,23 @@ function productCard(p) {
 }
 function home() {
   const s = S.settings, pop = S.products.filter(p => p.popular && p.available).slice(0, 8);
+  const tiles = [["hot", "latte"], ["cold", "iced"], ["dessert", "cake"], ["snack", "sandwich"], ["other", "matcha"]];
   app(`<section class="hero ${s.heroImage ? "img" : ""}" ${s.heroImage ? `style="background-image:url('${s.heroImage}')"` : ""}>
-  <div class="in"><div class="tag">SPECIALTY COFFEE · الشيخ زايد</div><h1>${esc(s.heroTitle)}</h1><p>${esc(s.heroText)}</p>
-  <div class="cta"><a class="btn" href="#/menu">شوف المنيو</a><a class="btn alt" href="#/booking">احجز طاولة</a></div></div>${s.heroImage ? "" : '<div class="cup">${I.cup}</div>'}</section>
+  <div class="in"><img class="hlogo" src="img/logo.png" alt="RIWAQ CAFÉ"><div class="tag">SPECIALTY COFFEE · الشيخ زايد</div><h1>${esc(s.heroTitle)}</h1><p>${esc(s.heroText)}</p>
+  <div class="cta"><a class="btn" href="#/menu">شوف المنيو</a><a class="btn alt" href="#/booking">احجز طاولة</a><a class="btn alt" href="#/order">اطلب أونلاين</a></div></div>${s.heroImage ? "" : `<div class="cup">${I.cup}</div>`}</section>
   <div class="wrap"><div class="info-strip"><div><b>${I.pin} العنوان</b>${esc(s.address)}</div><div><b>${I.clock} مواعيد العمل</b>${s.hours.map(esc).join("<br>")}</div><div><b>${I.phone} تواصل</b><span dir="ltr">${esc(s.phone)}</span></div></div>
+  <div class="sec-h"><div><h2>اختار مزاجك</h2><p class="sub">قهوة، حلويات، وجبات خفيفة</p></div><a href="#/menu">كل المنيو ←</a></div>
+  <div class="tiles">${tiles.map(t => `<a class="tile" href="#/menu" data-cat="${t[0]}" style="background-image:url('img/${t[1]}.jpg')"><span>${esc(catName(t[0]))}</span></a>`).join("")}</div>
+  <div class="split"><img src="img/interior.jpg" alt="داخل رِواق كافيه" loading="lazy"><div><span class="tag2">عن رِواق</span><h2>مش مجرد مكان لشرب القهوة</h2><p>مساحة بتجمع القهوة المختصة والأجواء الهادئة. تيجي تشتغل، تذاكر، تقابل صحابك، أو تاخد قهوتك الصبح وتمشي.</p><ul class="ticks"><li>قهوة مختصة من حبوب مختارة</li><li>أماكن هادئة للشغل والمذاكرة</li><li>حجز مسبق للجلسات واللقاءات</li></ul><a class="btn" href="#/about">اعرف أكتر</a></div></div>
   <div class="sec-h"><div><h2>الأكثر طلباً</h2><p class="sub">اللي ضيوفنا بيرجعوا يطلبوه</p></div><a href="#/menu">كل المنيو ←</a></div>
   <div class="grid">${pop.map(productCard).join("")}</div>
-  <div class="sec-h"><div><h2>تجربتك عندنا</h2></div></div>
-  <div class="grid">${[[I.cup, "قهوة بالذات", "حبوب مختارة ومحمّصة بعناية."], [I.laptop, "للشغل والمذاكرة", "هدوء وإنترنت وأماكن مريحة."], [I.users, "للقاءات", "جلسات للصحاب والعائلة ومناسبات خاصة."], [I.cake, "حلويات طازجة", "كل يوم من مطبخنا."]].map(x => `<div class="box"><div style="font-size:42px;color:var(--caramel)">${x[0]}</div><h3>${x[1]}</h3><p class="sub">${x[2]}</p></div>`).join("")}</div>
+  <div class="split rev"><img src="img/lounge.jpg" alt="جلسة هادئة" loading="lazy"><div><span class="tag2">للشغل واللقاءات</span><h2>احجز طاولتك قبل ما توصل</h2><p>اختار اليوم والوقت وعدد الأشخاص، وهنأكد معاك على الواتساب.</p><a class="btn" href="#/booking">احجز طاولة</a> <a class="btn alt dk" href="#/events">الفعاليات</a></div></div>
   <div class="sec-h"><div><h2>العروض</h2></div><a href="#/offers">كل العروض ←</a></div>
   <div class="grid">${S.offers.slice(0, 3).map(o => `<div class="box offer"><span class="status">${esc(o.tag)}</span><h3>${esc(o.title)}</h3><p>${esc(o.text)}</p></div>`).join("")}</div></div>`);
 }
 let mq = { q: "", cat: "all", sort: "pop" };
 function menu() {
-  app(`${phead("المنيو", "كل المشروبات والأكلات بالأسعار بالجنيه")}<div class="wrap">
+  app(`${phead("المنيو", "كل المشروبات والأكلات بالأسعار بالجنيه", "img/menu.jpg")}<div class="wrap">
   <div class="tools"><input id="q" type="search" placeholder="ابحث عن منتج..." value="${esc(mq.q)}"><select id="sort"><option value="pop">الأكثر طلباً</option><option value="lo">السعر: الأقل</option><option value="hi">السعر: الأعلى</option><option value="az">الاسم</option></select></div>
   <div class="chips" id="chips"></div><div class="grid" id="list"></div></div>`);
   $("#sort").value = mq.sort;
@@ -116,7 +119,7 @@ function product(id) {
 }
 function offers() { app(`${phead("عروض الكافيه", "عروض بتتغير باستمرار")}<div class="wrap"><div class="grid">${S.offers.map(o => `<div class="box offer"><span class="status">${esc(o.tag)}</span><h3>${esc(o.title)}</h3><p>${esc(o.text)}</p><a class="btn sm" style="margin-top:10px" href="#/menu">اطلب الآن</a></div>`).join("")}</div></div>`); }
 function about() {
-  app(`${phead("من نحن", "RIWAQ CAFÉ")}<div class="wrap legal" style="max-width:800px"><div class="box"><p>رِواق كافيه مش مجرد مكان لشرب القهوة. هو مساحة بتجمع القهوة المختصة والأجواء الهادئة والشغل والمذاكرة واللقاءات.</p><p>عايزين نقدم تجربة مختلفة للزائر، سواء جاي لقهوة الصبح، أو عايز يشتغل أو يذاكر بعيد عن البيت، أو يقابل صحابه، أو يستمتع بحلويات ومشروبات، أو يحجز مكان لجلسة خاصة.</p></div>
+  app(`${phead("من نحن", "RIWAQ CAFÉ")}<div class="wrap legal" style="max-width:900px"><div class="split" style="margin:0 0 24px"><img src="img/storefront.jpg" alt="واجهة رِواق"><img src="img/lounge.jpg" alt="الجلسات"></div><div class="box"><p>رِواق كافيه مش مجرد مكان لشرب القهوة. هو مساحة بتجمع القهوة المختصة والأجواء الهادئة والشغل والمذاكرة واللقاءات.</p><p>عايزين نقدم تجربة مختلفة للزائر، سواء جاي لقهوة الصبح، أو عايز يشتغل أو يذاكر بعيد عن البيت، أو يقابل صحابه، أو يستمتع بحلويات ومشروبات، أو يحجز مكان لجلسة خاصة.</p></div>
   <h3>لمين المكان؟</h3><div class="grid" style="margin-top:10px">${["الشباب من 18 إلى 35 سنة", "الطلاب", "الموظفين والشغل عن بُعد", "محبي القهوة المختصة", "العائلات والأصدقاء"].map(x => `<div class="box">✔ ${x}</div>`).join("")}</div>
   <div style="margin-top:22px"><a class="btn" href="#/booking">احجز طاولتك</a></div></div>`);
 }
@@ -212,7 +215,7 @@ function terms() {
 }
 function footer() {
   const s = S.settings;
-  $("#footer").innerHTML = `<div class="in"><div><h4>RIWAQ CAFÉ · رِواق كافيه</h4><p>${esc(s.address)}</p><p>${s.hours.map(esc).join("<br>")}</p></div><div><h4>روابط</h4><a href="#/menu">المنيو</a><a href="#/booking">حجز طاولة</a><a href="#/order">الطلب أونلاين</a><a href="#/events">الفعاليات</a><a href="#/faq">الأسئلة الشائعة</a></div><div><h4>قانوني</h4><a href="#/privacy">سياسة الخصوصية</a><a href="#/terms">الشروط والأحكام</a><a href="#/admin">دخول الإدارة</a></div></div><div class="copy">© ${new Date().getFullYear()} RIWAQ CAFÉ. جميع الحقوق محفوظة.</div>`;
+  $("#footer").innerHTML = `<div class="in"><div><img src="img/logo.png" alt="RIWAQ CAFÉ" style="height:70px;margin-bottom:8px"><h4>RIWAQ CAFÉ · رِواق كافيه</h4><p>${esc(s.address)}</p><p>${s.hours.map(esc).join("<br>")}</p></div><div><h4>روابط</h4><a href="#/menu">المنيو</a><a href="#/booking">حجز طاولة</a><a href="#/order">الطلب أونلاين</a><a href="#/events">الفعاليات</a><a href="#/faq">الأسئلة الشائعة</a></div><div><h4>قانوني</h4><a href="#/privacy">سياسة الخصوصية</a><a href="#/terms">الشروط والأحكام</a><a href="#/admin">دخول الإدارة</a></div></div><div class="copy">© ${new Date().getFullYear()} RIWAQ CAFÉ. جميع الحقوق محفوظة.</div>`;
   $("#wafloat").href = wa();
 }
 
