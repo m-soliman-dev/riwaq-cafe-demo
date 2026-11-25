@@ -1,3 +1,8 @@
+function pimg(n,c){
+  const m={"Hot Chocolate":"latte","Matcha Latte":"matcha","Fresh Orange Juice":"juice","Lemon Mint":"juice","Chocolate Brownie":"brownie","Chocolate Cookies":"cookies","Croissant":"croissant","Chicken Wrap":"wrap","Chicken Sandwich":"sandwich","Turkey & Cheese Sandwich":"sandwich","Club Sandwich":"sandwich"};
+  const byCat={hot:"latte",cold:"iced",other:"matcha",dessert:"cake",snack:"sandwich"};
+  return "img/"+(m[n]||byCat[c])+".jpg";
+}
 // بيانات البداية (تتخزن في المتصفح وتتعدل من لوحة التحكم)
 const SEED = {
   settings: {
@@ -10,7 +15,7 @@ const SEED = {
     deliveryFee: 30,
     heroTitle: "مساحة هادئة وقهوة مختلفة",
     heroText: "قهوة مختصة، حلويات طازجة، وأجواء تناسب شغلك ودراستك ولقاءاتك.",
-    heroImage: ""
+    heroImage: "img/storefront.jpg"
   },
   categories: [
     { id: "hot", name: "القهوة الساخنة", icon: "☕" },
@@ -47,7 +52,7 @@ const SEED = {
     ["Turkey & Cheese Sandwich","snack",155,"رومي مدخن وجبنة على خبز طازج.",0],
     ["Club Sandwich","snack",185,"ساندوتش كلوب بثلاث طبقات.",1],
     ["Chicken Wrap","snack",160,"راب دجاج مشوي بصوص ثوم.",0]
-  ].map((p,i)=>({id:"p"+(i+1),name:p[0],cat:p[1],price:p[2],desc:p[3],popular:!!p[4],available:true,image:""})),
+  ].map((p,i)=>({id:"p"+(i+1),name:p[0],cat:p[1],price:p[2],desc:p[3],popular:!!p[4],available:true,image:pimg(p[0],p[1])})),
   sizes: [{n:"صغير",add:0},{n:"وسط",add:15},{n:"كبير",add:30}],
   extras: [{n:"شوت إضافي",add:20},{n:"سيرب (فانيليا / كراميل)",add:15},{n:"حليب شوفان",add:25},{n:"كريمة مخفوقة",add:10}],
   offers: [
@@ -61,8 +66,8 @@ const SEED = {
     {id:"e3",title:"ليلة قراءة",date:"الأحد القادم، 7 مساءً",text:"هات كتابك واقرا وسط ناس بتحب القراءة."}
   ],
   gallery: [
-    {id:"g1",cap:"ركن القهوة",image:""},{id:"g2",cap:"الجلسات الهادئة",image:""},{id:"g3",cap:"الحلويات",image:""},
-    {id:"g4",cap:"ركن العمل والدراسة",image:""},{id:"g5",cap:"الجلسة الخارجية",image:""},{id:"g6",cap:"أمسيات الفعاليات",image:""}
+    {id:"g1",cap:"واجهة رِواق",image:"img/storefront.jpg"},{id:"g2",cap:"قهوة بالذات",image:"img/latte.jpg"},{id:"g3",cap:"المساحة الداخلية",image:"img/interior.jpg"},
+    {id:"g4",cap:"جلسة هادئة للقاءات",image:"img/lounge.jpg"},{id:"g5",cap:"حلويات طازجة",image:"img/cake.jpg"},{id:"g6",cap:"كرواسون الصباح",image:"img/croissant.jpg"},{id:"g7",cap:"مشروبات باردة",image:"img/iced.jpg"},{id:"g8",cap:"اطلب واستلم",image:"img/takeaway.jpg"}
   ],
   faq: [
     ["هل الأسعار شاملة الضريبة؟","الأسعار المعروضة بالجنيه المصري وهي نفس أسعار الفرع."],
